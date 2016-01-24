@@ -27,13 +27,7 @@ class RemoteOkParser
 			}
 
 			link = element.css("td.source a").attr("href").value
-
-			if link.start_with?('mailto')
-				job[:link] = link
-			else
-				job[:link] = "https://remoteok.io#{link}"
-			end
-
+			job[:link] = link.start_with?('mailto') ? link : "https://remoteok.io#{link}"
 			job
 		end
 	end
