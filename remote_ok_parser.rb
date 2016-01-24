@@ -5,12 +5,12 @@ require 'json'
 class RemoteOkParser
 	def grab_front_page_jobs
 		front_page_html = Nokogiri::HTML(open("https://remoteok.io/"))
-		puts job_postings_as_json(front_page_html)
+		job_postings_as_json(front_page_html)
 	end
 
 	def grab_jobs_by_filter_word filter_word
 		filtered_jobs_html = Nokogiri::HTML(open("https://remoteok.io/remote-#{filter_word}-jobs"))
-		puts job_postings_as_json(filtered_jobs_html)
+		job_postings_as_json(filtered_jobs_html)
 	end
 
 	private
