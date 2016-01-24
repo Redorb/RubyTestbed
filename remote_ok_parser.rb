@@ -17,11 +17,24 @@ class RemoteOkParser
 	def job_postings_as_json(html_to_parse)
 		job_elements = html_to_parse.css("tr[itemtype='http://schema.org/JobPosting']")
 		job_list = job_elements.map do |element|
-			{ 
-				:job_name => element.css("a[itemprop='url'] h2").text,
-				:company_name => element.css("a[itemprop='hiringOrganization'] h3").text,
-				:tags => element.css("td.tags h3").map do |tag| tag.text.split("3>")[0] end
+			job = { 
+				:job_name => 
+					element.css("a[itemprop='url'] h2").text,
+				:company_name => 
+					element.css("a[itemprop='hiringOrganization'] h3").text,
+				:tags => 
+					element.css("td.tags h3").map do |tag| tag.text.split("3>")[0] end
 			}
+
+			link = element.css("td.source a").attr("href").value
+
+			if link.start_with?('mailto')
+				job[:link] = link
+			else
+				job[:link] = "https://remoteok.io#{link}"
+			end
+
+			job
 		end
 	end
 end
