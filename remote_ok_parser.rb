@@ -17,13 +17,16 @@ class RemoteOkParser
 	def job_postings_as_json(html_to_parse)
 		job_elements = html_to_parse.css("tr[itemtype='http://schema.org/JobPosting']")
 		job_list = job_elements.map do |element|
+			job_id = element.attr("data-id")
 			job = { 
 				:job_name => 
 					element.css("a[itemprop='url'] h2").text,
 				:company_name => 
 					element.css("a[itemprop='hiringOrganization'] h3").text,
 				:tags => 
-					element.css("td.tags h3").map do |tag| tag.text.split("3>")[0] end
+					element.css("td.tags h3").map do |tag| tag.text.split("3>")[0] end,
+				:description =>
+					map_desc_to_job_as_text(job_id, html_to_parse)
 			}
 
 			link = element.css("td.source a").attr("href").value
@@ -31,5 +34,11 @@ class RemoteOkParser
 			job
 		end
 		job_list.to_json
+	end
+
+	def map_desc_to_job_as_text job_id, html_to_parse
+		job_desc_element = html_to_parse.css("tr.expand-#{job_id}")
+		job_desc_text = job_desc_element.css("div.description > div:not(.p) p")
+		job_desc_text.text
 	end
 end
