@@ -33,6 +33,3 @@ class RemoteOkParser
 		job_list.to_json
 	end
 end
-
-test = RemoteOkParser.new
-test.grab_front_page_jobs
