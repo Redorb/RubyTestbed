@@ -30,5 +30,9 @@ class RemoteOkParser
 			job[:link] = link.start_with?('mailto') ? link : "https://remoteok.io#{link}"
 			job
 		end
+		job_list.to_json
 	end
 end
+
+test = RemoteOkParser.new
+test.grab_front_page_jobs
